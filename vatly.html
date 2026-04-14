@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Trắc nghiệm Vật lý THPT | Ôn thi Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Poppins', 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9f0ff 0%, #d9e3fa 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+            transition: all 0.2s;
+        }
+
+        .header {
+            background: #0b2b44;
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.9rem;
+            letter-spacing: -0.5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.85;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .stats-bar {
+            background: #1e4a76;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .question-counter {
+            background: #ffd966;
+            color: #1e2a3a;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: bold;
+        }
+
+        .shuffle-btn {
+            background: #f39c12;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2c3e2f;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .shuffle-btn:hover {
+            background: #e67e22;
+            transform: scale(0.96);
+            color: white;
+        }
+
+        .quiz-area {
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 28px;
+            margin-bottom: 2rem;
+            padding: 1.5rem 1.8rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0a2b3e;
+            margin-bottom: 1.2rem;
+            line-height: 1.4;
+            border-left: 5px solid #2c7da0;
+            padding-left: 18px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2edf2;
+        }
+
+        .option:hover {
+            background: #eef3fc;
+            transform: translateX(4px);
+        }
+
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #1f6392;
+            cursor: pointer;
+        }
+
+        .option label {
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            flex: 1;
+            color: #1f3b4c;
+        }
+
+        .submit-area {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0 30px;
+        }
+
+        .btn-submit {
+            background: #0f5b7a;
+            border: none;
+            padding: 14px 36px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-submit:hover {
+            background: #0a4159;
+            transform: scale(0.97);
+        }
+
+        .result-box {
+            background: #eef2f9;
+            margin: 0 2rem 2rem 2rem;
+            padding: 1.5rem;
+            border-radius: 32px;
+            text-align: center;
+            border: 1px solid #cbdbe2;
+        }
+
+        .score-circle {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: #0b2b44;
+            display: inline-block;
+            padding: 10px 28px;
+            border-radius: 70px;
+            color: #ffdf8c;
+            margin-bottom: 10px;
+        }
+
+        .feedback {
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .reset-link {
+            background: none;
+            border: none;
+            color: #1f6392;
+            font-weight: bold;
+            margin-top: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            padding: 18px;
+            color: #4a627a;
+            background: #f0f4fa;
+            border-top: 1px solid #dce5ef;
+        }
+
+        @media (max-width: 650px) {
+            .quiz-area {
+                padding: 1rem;
+            }
+
+            .question-card {
+                padding: 1rem;
+            }
+
+            .options {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>📚 Ôn thi Vật lý THPT</h1>
+            <p>25 câu hỏi trắc nghiệm · Có xáo trộn câu & đáp án · Chấm điểm chi tiết</p>
+        </div>
+        <div class="stats-bar">
+            <span>🎯 Bộ đề tổng hợp từ lý thuyết 10-12</span>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <span class="question-counter" id="totalQty">25 câu</span>
+                <button class="shuffle-btn" id="shuffleBtn">🔄 Xáo trộn câu hỏi & đáp án</button>
+            </div>
+        </div>
+
+        <div class="quiz-area" id="quizArea">
+            <!-- Các câu hỏi sẽ được render động bằng js -->
+            <div style="text-align: center; padding: 40px;">Đang tải đề thi...</div>
+        </div>
+
+        <div class="submit-area">
+            <button class="btn-submit" id="submitBtn">✅ NỘP BÀI & CHẤM ĐIỂM</button>
+        </div>
+
+        <div id="resultPanel" class="result-box" style="display: none;">
+            <!-- Kết quả sẽ hiển thị ở đây -->
+        </div>
+        <footer>
+            ⚡ Hệ thống tự động xáo trộn thứ tự câu hỏi + thứ tự phương án mỗi lần nhấn "Xáo trộn" | Đáp án dựa trên đáp
+            án chuẩn
+        </footer>
+    </div>
+
+    <script>
+        // ---------- DỮ LIỆU GỐC: 25 câu hỏi & đáp án đúng (A, B, C, D) ----------
+        const rawQuestions = [
+            { text: "Một hệ quy chiếu đầy đủ dùng để xác định vị trí và thời gian của vật chuyển động bao gồm:", options: ["Vật làm mốc và hệ tọa độ.", "Vật làm mốc, mốc thời gian và đồng hồ.", "Hệ tọa độ, mốc thời gian và đồng hồ.", "Vật làm mốc, hệ tọa độ, mốc thời gian và đồng hồ."], correct: "D" },
+            { text: "Chuyển động rơi tự do là chuyển động:", options: ["Thẳng đều.", "Thẳng biến đổi đều.", "Thẳng chậm dần đều.", "Tròn đều."], correct: "B" },
+            { text: "Theo định luật II Newton, gia tốc của một vật tỉ lệ thuận với:", options: ["Khối lượng của vật.", "Vận tốc của vật.", "Lực tác dụng lên vật.", "Thời gian tác dụng lực."], correct: "C" },
+            { text: "Đơn vị của điện thế trong hệ SI là:", options: ["Ampe (A).", "Vôn (V).", "Culông (C).", "Ôm (Ω)."], correct: "B" },
+            { text: "Chu kỳ dao động của con lắc lò xo phụ thuộc vào:", options: ["Biên độ dao động.", "Khối lượng vật và độ cứng lò xo.", "Gia tốc trọng trường.", "Cách kích thích dao động."], correct: "B" },
+            { text: "Trong sơ đồ khối của một máy phát thanh vô tuyến đơn giản, không có bộ phận nào sau đây?", options: ["Mạch biến điệu.", "Mạch tách sóng.", "Mạch khuếch đại.", "Ăng-ten phát."], correct: "B" },
+            { text: "Hiện tượng quang điện ngoài là hiện tượng electron bật ra khỏi bề mặt kim loại khi:", options: ["Cho dòng điện chạy qua kim loại đó.", "Nung nóng kim loại đến nhiệt độ cao.", "Chiếu ánh sáng thích hợp vào kim loại đó.", "Kim loại bị va chạm mạnh."], correct: "C" },
+            { text: "Phản ứng nhiệt hạch là phản ứng:", options: ["Một hạt nhân nặng vỡ thành hai hạt nhân nhẹ hơn.", "Hai hạt nhân rất nhẹ kết hợp thành một hạt nhân nặng hơn.", "Hạt nhân tự phát ra các tia phóng xạ.", "Electron kết hợp với hạt nhân tạo thành neutron."], correct: "B" },
+            { text: "Một vật chuyển động thẳng đều dọc theo trục Ox. Phương trình tọa độ có dạng x = x₀ + vt. Nếu vật chuyển động ngược chiều dương thì:", options: ["v > 0.", "v < 0.", "v = 0.", "x < 0."], correct: "B" },
+            { text: "Khi khoảng cách giữa hai điện tích điểm trong chân không tăng lên 2 lần thì lực tương tác tĩnh điện giữa chúng sẽ:", options: ["Tăng 2 lần.", "Tăng 4 lần.", "Giảm 2 lần.", "Giảm 4 lần."], correct: "D" },
+            { text: "Một dòng điện chạy trong dây dẫn thẳng dài. Nếu cường độ dòng điện tăng gấp đôi thì cảm ứng từ tại một điểm cách dây dẫn một khoảng không đổi sẽ:", options: ["Tăng 2 lần.", "Tăng 4 lần.", "Giảm 2 lần.", "Không đổi."], correct: "A" },
+            { text: "Trong hiện tượng khúc xạ ánh sáng, nếu tia sáng đi từ môi trường chiết quang kém sang môi trường chiết quang hơn (n₁ < n₂) thì góc khúc xạ (r) so với góc tới (i) là:", options: ["r > i.", "r < i.", "r = i.", "r + i = 90°."], correct: "B" },
+            { text: "Một con lắc đơn đang dao động điều hòa. Khi vật đi qua vị trí cân bằng thì:", options: ["Thế năng cực đại, động năng bằng 0.", "Thế năng bằng 0, động năng cực đại.", "Cơ năng bằng 0.", "Vận tốc của vật bằng 0."], correct: "B" },
+            { text: "Sóng cơ học không truyền được trong môi trường nào sau đây?", options: ["Chất lỏng.", "Chất khí.", "Chất rắn.", "Chân không."], correct: "D" },
+            { text: "Trong mạch điện xoay chiều chỉ có tụ điện, cường độ dòng điện trong mạch:", options: ["Trễ pha π/2 so với điện áp giữa hai bản tụ.", "Sớm pha π/2 so với điện áp giữa hai bản tụ.", "Cùng pha với điện áp giữa hai bản tụ.", "Ngược pha với điện áp giữa hai bản tụ."], correct: "B" },
+            { text: "Quang phổ vạch phát xạ do chất nào sau đây phát ra khi bị nung nóng?", options: ["Chất rắn.", "Chất lỏng.", "Chất khí ở áp suất thấp.", "Chất khí ở áp suất cao."], correct: "C" },
+            { text: "Pin quang điện hoạt động dựa trên hiện tượng:", options: ["Quang điện ngoài.", "Quang điện trong.", "Phát quang của chất rắn.", "Tán sắc ánh sáng."], correct: "B" },
+            { text: "Đại lượng nào sau đây đặc trưng cho mức độ bền vững của hạt nhân?", options: ["Năng lượng liên kết.", "Năng lượng nghỉ.", "Năng lượng liên kết riêng.", "Độ hụt khối."], correct: "C" },
+            { text: "Một ô tô đang chuyển động với vận tốc 10 m/s thì hãm phanh chuyển động chậm dần đều với gia tốc 2 m/s². Quãng đường ô tô đi được cho đến khi dừng hẳn là:", options: ["25 m.", "50 m.", "20 m.", "10 m."], correct: "A" },
+            { text: "Một mạch điện kín gồm nguồn điện có suất điện động E = 6V, điện trở trong r = 1Ω và điện trở mạch ngoài R = 2Ω. Cường độ dòng điện trong mạch là:", options: ["2 A.", "3 A.", "6 A.", "1 A."], correct: "A" },
+            { text: "Một thấu kính hội tụ có tiêu cự f = 20 cm. Một vật sáng đặt trước thấu kính, cách thấu kính 30 cm. Ảnh của vật qua thấu kính là:", options: ["Ảnh ảo, cách thấu kính 60 cm.", "Ảnh thật, cách thấu kính 60 cm.", "Ảnh thật, cách thấu kính 12 cm.", "Ảnh ảo, cách thấu kính 12 cm."], correct: "B" },
+            { text: "Một chất điểm dao động điều hòa với phương trình x = 5 cos(4πt + π/2) cm. Tần số dao động của chất điểm là:", options: ["4 Hz.", "2 Hz.", "0,5 Hz.", "4π Hz."], correct: "B" },
+            { text: "Trong thí nghiệm giao thoa ánh sáng Young, khoảng cách giữa 2 khe là 1 mm, khoảng cách từ 2 khe đến màn là 2 m. Chiếu ánh sáng đơn sắc có bước sóng 0,5 μm. Khoảng vân trên màn là:", options: ["1 mm.", "0,5 mm.", "2 mm.", "1,5 mm."], correct: "A" },
+            { text: "Giới hạn quang điện của một kim loại là 0,3 μm. Công thoát electron của kim loại đó là (lấy h = 6,625.10⁻³⁴ J.s; c = 3.10⁸ m/s):", options: ["6,625.10⁻¹⁹ J.", "2,208.10⁻¹⁹ J.", "6,625.10⁻²⁰ J.", "1,987.10⁻¹⁹ J."], correct: "A" },
+            { text: "Hạt nhân ⁴₂He có khối lượng 4,0015 u. Biết mₚ = 1,0073 u; mₙ = 1,0087 u. Độ hụt khối của hạt nhân He là:", options: ["0,0305 u.", "0,0300 u.", "0,0241 u.", "0,0145 u."], correct: "A" }
+        ];
+
+        // biến lưu trữ trạng thái hiện tại
+        let currentQuestions = [];      // mảng các câu đã được xáo trộn thứ tự
+        let userAnswers = new Array(25).fill(null);   // lưu đáp án đã chọn theo index câu hiện tại (A/B/C/D)
+
+        // Hàm xáo trộn mảng (Fisher-Yates)
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Xáo trộn thứ tự các phương án trong 1 câu (giữ đúng đáp án mapping)
+        // Mỗi câu sẽ có options mới và cần xác định lại ký tự đáp án đúng sau xáo trộn (ví dụ: ban đầu đúng là 'C', sau shuffle đáp án đúng chuyển thành vị trí mới)
+        function shuffleOptionsInQuestion(question) {
+            // Tạo mảng các object {letter, text}
+            const originalLetters = ['A', 'B', 'C', 'D'];
+            const optPairs = originalLetters.map((letter, idx) => ({
+                letter: letter,
+                text: question.options[idx]
+            }));
+            // xáo trộn mảng optPairs
+            const shuffledPairs = shuffleArray([...optPairs]);
+            const newOptions = shuffledPairs.map(p => p.text);
+            // tìm lại letter mới tương ứng với đáp án đúng cũ
+            const oldCorrectLetter = question.correct; // vd 'B'
+            const oldCorrectText = question.options[originalLetters.indexOf(oldCorrectLetter)];
+            const newCorrectLetterObj = shuffledPairs.find(p => p.text === oldCorrectText);
+            const newCorrectLetter = newCorrectLetterObj ? newCorrectLetterObj.letter : oldCorrectLetter;
+
+            return {
+                options: newOptions,
+                correct: newCorrectLetter
+            };
+        }
+
+        // Xáo trộn toàn bộ: thứ tự câu + trong mỗi câu xáo trộn đáp án
+        function shuffleFullExam() {
+            // 1. copy raw data
+            let cloned = rawQuestions.map(q => ({ ...q, options: [...q.options], correct: q.correct }));
+            // 2. xáo trộn thứ tự câu
+            cloned = shuffleArray(cloned);
+            // 3. với mỗi câu, xáo trộn thứ tự options + cập nhật correct letter
+            cloned = cloned.map(q => {
+                const { options, correct } = shuffleOptionsInQuestion(q);
+                return {
+                    text: q.text,
+                    options: options,
+                    correct: correct
+                };
+            });
+            currentQuestions = cloned;
+            // reset userAnswers theo index mới
+            userAnswers = new Array(currentQuestions.length).fill(null);
+        }
+
+        // Render toàn bộ câu hỏi ra giao diện, khôi phục lựa chọn nếu có
+        function renderQuiz() {
+            const quizArea = document.getElementById('quizArea');
+            if (!quizArea) return;
+            if (!currentQuestions.length) {
+                quizArea.innerHTML = '<div style="padding:2rem; text-align:center;">Lỗi dữ liệu</div>';
+                return;
+            }
+            let html = '';
+            currentQuestions.forEach((q, idx) => {
+                const selectedVal = userAnswers[idx]; // 'A','B','C',D hoặc null
+                html += `
+                <div class="question-card" data-qidx="${idx}">
+                    <div class="question-text"><span style="font-weight:800;">Câu ${idx + 1}:</span> ${q.text}</div>
+                    <div class="options" data-qidx="${idx}">
+            `;
+                const letters = ['A', 'B', 'C', 'D'];
+                q.options.forEach((opt, optIdx) => {
+                    const letter = letters[optIdx];
+                    const checkedAttr = (selectedVal === letter) ? 'checked' : '';
+                    html += `
+                    <div class="option" data-letter="${letter}" data-qidx="${idx}">
+                        <input type="radio" name="q${idx}" value="${letter}" id="q${idx}_${letter}" ${checkedAttr}>
+                        <label for="q${idx}_${letter}"><strong>${letter}.</strong> ${opt}</label>
+                    </div>
+                `;
+                });
+                html += `</div></div>`;
+            });
+            quizArea.innerHTML = html;
+
+            // Gắn sự kiện cho các radio để cập nhật userAnswers khi người dùng chọn
+            for (let i = 0; i < currentQuestions.length; i++) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        if (e.target.checked) {
+                            userAnswers[i] = e.target.value;
+                        }
+                    });
+                });
+            }
+            // Cập nhật tổng số câu trên thanh
+            const totalSpan = document.getElementById('totalQty');
+            if (totalSpan) totalSpan.innerText = `${currentQuestions.length} câu`;
+        }
+
+        // Chấm điểm
+        function gradeExam() {
+            let score = 0;
+            const details = [];
+            for (let i = 0; i < currentQuestions.length; i++) {
+                const q = currentQuestions[i];
+                const userChoice = userAnswers[i];
+                const isCorrect = (userChoice === q.correct);
+                if (isCorrect) score++;
+                details.push({
+                    index: i,
+                    userAnswer: userChoice || '(Chưa chọn)',
+                    correctAnswer: q.correct,
+                    isCorrect: isCorrect,
+                    questionText: q.text
+                });
+            }
+            const percent = Math.round((score / currentQuestions.length) * 100);
+            // hiển thị panel kết quả
+            const resultPanel = document.getElementById('resultPanel');
+            let feedbackHtml = `
+            <div class="score-circle">🎯 ${score} / ${currentQuestions.length}  (${percent} điểm)</div>
+            <div class="feedback">${percent >= 80 ? '🏆 Xuất sắc! Bạn nắm vững kiến thức.' : (percent >= 50 ? '👍 Khá tốt, cần cải thiện thêm.' : '📘 Hãy xem lại lý thuyết, cố gắng hơn nữa!')}</div>
+            <button id="viewDetailBtn" class="reset-link" style="background:#1f6392; color:white; border:none; padding:8px 18px; border-radius:40px; margin-top:12px;">🔍 Xem chi tiết đáp án</button>
+            <div id="detailAnswerArea" style="margin-top:18px; text-align:left; max-height:300px; overflow-y:auto; background:#ffffffd9; border-radius:24px; padding:12px; display:none;"></div>
+        `;
+            resultPanel.innerHTML = feedbackHtml;
+            resultPanel.style.display = 'block';
+
+            // Xử lý sự kiện xem chi tiết
+            const detailBtn = document.getElementById('viewDetailBtn');
+            const detailArea = document.getElementById('detailAnswerArea');
+            if (detailBtn) {
+                detailBtn.onclick = () => {
+                    if (detailArea.style.display === 'none') {
+                        let detailHtml = `<table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                        <thead><tr style="background:#e0e7ff;"><th>#</th><th>Câu hỏi</th><th>Đáp án bạn chọn</th><th>Đáp án đúng</th><th>Kết quả</th></tr></thead><tbody>`;
+                        details.forEach(d => {
+                            const statusIcon = d.isCorrect ? '✅' : '❌';
+                            detailHtml += `<tr style="border-bottom:1px solid #ccc;">
+                            <td style="padding:8px;">${d.index + 1}</td>
+                            <td style="padding:8px; max-width:300px;">${d.questionText.substring(0, 70)}${d.questionText.length > 70 ? '...' : ''}</td>
+                            <td style="padding:8px;">${d.userAnswer}</td>
+                            <td style="padding:8px;">${d.correctAnswer}</td>
+                            <td style="padding:8px;">${statusIcon}</td>
+                        </tr>`;
+                        });
+                        detailHtml += `</tbody></table><p style="margin-top:10px;"><small>💡 Mỗi lần xáo trộn lại câu hỏi và thứ tự đáp án, đề thi mới hoàn toàn</small></p>`;
+                        detailArea.innerHTML = detailHtml;
+                        detailArea.style.display = 'block';
+                        detailBtn.innerText = '📘 Ẩn chi tiết';
+                    } else {
+                        detailArea.style.display = 'none';
+                        detailBtn.innerText = '🔍 Xem chi tiết đáp án';
+                    }
+                };
+            }
+            // Cuộn tới kết quả
+            resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Khởi tạo lần đầu & gắn sự kiện
+        function init() {
+            shuffleFullExam();      // xáo trộn lần đầu (cả câu và đáp án)
+            renderQuiz();
+            const submitBtn = document.getElementById('submitBtn');
+            const shuffleBtn = document.getElementById('shuffleBtn');
+
+            submitBtn.onclick = () => {
+                gradeExam();
+            };
+
+            shuffleBtn.onclick = () => {
+                // Xáo trộn lại toàn bộ câu hỏi + đáp án, reset bài làm
+                shuffleFullExam();
+                userAnswers = new Array(currentQuestions.length).fill(null);
+                renderQuiz();
+                // Ẩn kết quả cũ
+                const resultPanel = document.getElementById('resultPanel');
+                if (resultPanel) resultPanel.style.display = 'none';
+                // Thông báo nhẹ
+                const statsBar = document.querySelector('.stats-bar');
+                const originalMsg = statsBar?.innerHTML;
+                if (statsBar) {
+                    const tempMsg = document.createElement('span');
+                    tempMsg.innerText = '✓ Đã xáo trộn câu hỏi & đáp án!';
+                    tempMsg.style.background = '#ffb347';
+                    tempMsg.style.padding = '2px 12px';
+                    tempMsg.style.borderRadius = '20px';
+                    tempMsg.style.fontSize = '0.8rem';
+                    statsBar.appendChild(tempMsg);
+                    setTimeout(() => tempMsg.remove(), 1500);
+                }
+            };
+        }
+
+        // Chạy khi tải trang
+        init();
+    </script>
+</body>
+
+</html>
